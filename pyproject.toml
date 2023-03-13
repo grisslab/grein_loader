@@ -20,3 +20,7 @@ classifiers = [
 dependencies = [
 "requests", "pandas"
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/grisslab/grein_loader"
+"Bug Tracker" = "https://github.com/grisslab/grein_loader/issues"
