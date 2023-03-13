@@ -1,0 +1,2 @@
+class GreinLoaderException(Exception):
+    pass

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "grein_loader"
+version = "0.0.1"
+authors = [
+  {name="Griss Lab", email="johannes.griss@meduniwien.ac.at"},
+  {name="Alexander Grentner", email="alexander.grentner@meduniwien.ac.at"}
+]
+description = "Package for loading datasets from GREIN"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+"requests", "pandas"
+]
