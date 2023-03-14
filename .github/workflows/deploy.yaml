@@ -6,9 +6,10 @@ inputs:
     required: false
     default: __token__
 
-on: push
-  tags:
-  - v*
+on: 
+  push:
+    tags:
+    - v*
 
 jobs:
   - name: Publish a Python distribution to PyPI

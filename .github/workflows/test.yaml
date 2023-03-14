@@ -1,9 +1,10 @@
 name: Test Package
 
-on: push
-  paths:
-    - "src/*"
-    - "tests/*"
+on: 
+  push:
+    paths:
+      - "src/*"
+      - "tests/*"
 
 jobs:
   build:
