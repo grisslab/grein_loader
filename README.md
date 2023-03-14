@@ -1,3 +1,5 @@
+![Test Badge](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml/badge.svg)
+
 # grein_loader
 
 Python package to automatically download datasets from GREIN
