@@ -19,7 +19,7 @@ class TestDataset(unittest.TestCase):
     def test_dataset(self):
         LOGGER.info("Test dataset with geo accession: ", self.geo_accession)
         r = requests.get("http://www.ilincs.org/apps/grein/?gse=GSE112749")
-        LOGGER.warning(f"Grein dataset {self.geo_accession} with status code: ", r.status_code)
+        LOGGER.warning(f"Grein dataset {self.geo_accession} with status code: { r.status_code }")
         self.assertEqual(r.status_code, 200, f"Error GREIN dataset {self.geo_accession} not available")
 
     def test_dataset_request(self):
@@ -40,6 +40,8 @@ class TestDataset(unittest.TestCase):
         LOGGER.info(f"Test GREIN metadata with GeoId: {self.geo_accession}")
         description, metadata, count_matrix = loader.load_dataset(self.geo_accession)
         self.assertIsNotNone(metadata)
+        self.assertIsNotNone(description)
+        self.assertIsNotNone(count_matrix)
 
     def test_overview(self):
         LOGGER.info("Test overview of GREIN datasets")
