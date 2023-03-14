@@ -1,8 +1,7 @@
 import unittest
 import logging
 import requests
-import sys
-import src.grein_loader as loader
+import grein_loader as loader
 
 LOGGER = logging.getLogger(__name__)
 
