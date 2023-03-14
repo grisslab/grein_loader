@@ -13,7 +13,7 @@ Grein Loader enables users to access data from the GREIN website by using the GS
 
 Install the package from pypi by using: 
 ```
-pip install grein_loader_py
+pip install grein_loader
 ```
 
 
