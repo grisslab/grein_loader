@@ -1,4 +1,4 @@
-![Test Badge](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml/badge.svg)
+[![Test Package](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml)
 
 # grein_loader
 
