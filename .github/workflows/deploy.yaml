@@ -1,11 +1,5 @@
 name: Deploy package
 
-inputs:
-  user:
-    description: PyPI user
-    required: false
-    default: __token__
-
 on: 
   push:
     tags:
