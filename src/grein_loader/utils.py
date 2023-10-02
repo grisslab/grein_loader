@@ -24,8 +24,8 @@ class GreinLoaderUtils:
     def stream_dataset_parameter(self):
         return '["7#0|m|{\\"method\\":\\"update\\",\\"data\\":{\\"geo_acc\\":\\"' + self.gse_id + '\\"}}"]'
 
-    def description_formdata(self):
-        return "draw=1&columns[0][data]=0&columns[0][name]&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]&columns[1][searchable]=true&columns[1][orderable]=true&columns[1][search][value]&columns[1][search][regex]=false&start=0&length=10&search[value]&search[regex]=false&search[caseInsensitive]=true&search[smart]=true&escape=false"
+    def description_formdata(self, no_samples = 100):
+        return f"draw=1&columns[0][data]=0&columns[0][name]&columns[0][searchable]=true&columns[0][orderable]=false&columns[0][search][value]&columns[0][search][regex]=false&columns[1][data]=1&columns[1][name]&columns[1][searchable]=true&columns[1][orderable]=true&columns[1][search][value]&columns[1][search][regex]=false&start=0&length={no_samples}&search[value]&search[regex]=false&search[caseInsensitive]=true&search[smart]=true&escape=false"
 
     def metadata_labels_parameter(self):
         return '["B#0|m|{\\"method\\":\\"update\\",\\"data\\":{\\"tab2\\":\\"metadata\\",\\".clientdata_output_geo_summary_hidden\\":true,\\".clientdata_output_metadata_hidden\\":false,\\".clientdata_output_metadata_full_hidden\\":false,\\".clientdata_output_ontology_hidden\\":false}}"]'
@@ -36,8 +36,8 @@ class GreinLoaderUtils:
     def raw_form_start(self):
         return "draw=1&columns%5B0%5D%5Bdata%5D=0&columns%5B0%5D%5Bname%5D=&columns%5B0%5D%5Bsearchable%5D=true&columns%5B0%5D%5Borderable%5D=false&columns%5B0%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B0%5D%5Bsearch%5D%5Bregex%5D=false"
 
-    def raw_form_end(self):
-        return "start=0&length=9&search%5Bvalue%5D=&search%5Bregex%5D=false&search%5BcaseInsensitive%5D=true&search%5Bsmart%5D=true&escape=true"
+    def raw_form_end(self, no_samples = 100):
+        return f"start=0&length={no_samples}&search%5Bvalue%5D=&search%5Bregex%5D=false&search%5BcaseInsensitive%5D=true&search%5Bsmart%5D=true&escape=true"
 
     def raw_form_column(self, n):
         return f"&columns%5B{n}%5D%5Bdata%5D={n}&columns%5B{n}%5D%5Bname%5D=&columns%5B{n}%5D%5Bsearchable%5D=true&columns%5B{n}%5D%5Borderable%5D=true&columns%5B{n}%5D%5Bsearch%5D%5Bvalue%5D=&columns%5B{n}%5D%5Bsearch%5D%5Bregex%5D=false&"

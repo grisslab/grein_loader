@@ -146,7 +146,7 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
 
     # random string must be created for the nonce parameter in the following requests
     random_str = utils.GreinLoaderUtils.get_random_nonce_parameter()
-    # the description is requested for the dataset
+    # the description is requested for the dataset,     
     try:
         LOGGER.debug("Request Dataset")
         description_r = s.post(
@@ -157,7 +157,7 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
                 "Origin": "http://www.ilincs.org",
                 "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
             },
-            data=payloads.description_formdata())
+            data=payloads.description_formdata(100))
         description_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         LOGGER.error(f"Dataset description for {gse_id} not received: ", err)
@@ -179,7 +179,11 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
 
     # parsing the provided data from streaming for keys in the metadata, later used for the metadata dictionary
     meta_data_labels = _parse_metadata(ui_content)
-    metadata_formdata = _generate_metadata_formdata(len(meta_data_labels))
+    data_samples = json.loads(description_r.content.decode())
+    data_content = data_samples["data"]
+    sample_content = data_content[1]
+    no_of_samples = sample_content[1]
+    metadata_formdata = _generate_metadata_formdata(len(meta_data_labels), no_of_samples)
 
     # random string created for requesting the metadata
     random_str = ''.join(random.choice(string.ascii_letters) for _ in range(10))
@@ -231,7 +235,7 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
             json.loads(description_r.content.decode()))  # streaming content must be decoded
 
     # formats metadata to a dictionary with labels provided by metadata_labels_r and values provided by metadata_r
-    if metadata_r.status_code != 500:
+    if metadata_r.status_code != 500:   
         metadata = json.loads(metadata_r.content.decode())
         metadata = _format_metadata(metadata, meta_data_labels)
 
@@ -303,7 +307,7 @@ def _parse_metadata(stream_list):
     return item_list
 
 
-def _generate_metadata_formdata(n_columns):
+def _generate_metadata_formdata(n_columns, no_samples=100):
     """
     generates formdata for metadata
     :param: number of columns used for metadata
@@ -317,6 +321,6 @@ def _generate_metadata_formdata(n_columns):
     while n < n_columns-5:
         raw_form += raw_utils.raw_form_column(n)
         n = n+1
-    raw_form += raw_utils.raw_form_end()
+    raw_form += raw_utils.raw_form_end(no_samples)
     return raw_form
 
