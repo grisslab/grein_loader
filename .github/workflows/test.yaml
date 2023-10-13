@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "src/*"
-      - "tests/*"
+      - '**.py'
 
 jobs:
   build:
