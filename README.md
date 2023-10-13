@@ -1,4 +1,5 @@
 [![Test Package](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/grisslab/grein_loader/actions/workflows/test.yaml)
+[![PyPI version](https://badge.fury.io/py/grein-loader.svg)](https://badge.fury.io/py/grein-loader)
 
 # grein_loader
 
