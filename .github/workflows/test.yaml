@@ -1,6 +1,7 @@
 name: Test Package
 
 on: 
+  workflow_dispatch:
   push:
     paths:
       - "src/*"
