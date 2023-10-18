@@ -5,7 +5,6 @@ import logging
 from . import utils
 from .exceptions import GreinLoaderException
 
-
 LOGGER = logging.getLogger(__name__)
 MAX_GREIN_DATASETS = 1000000
 
@@ -134,9 +133,9 @@ def _format_geo_accession(geo_accession_id):
         :param: geo_accession_id: geo accession of GRIEN Dataset
         :return: formatted geo accession for a GREIN Dataset
     """
-    s = re.search("GSE[0-9][0-9][0-9][0-9][0-9][0-9]", geo_accession_id)
+    #s = re.search("GSE[0-9][0-9][0-9][0-9][0-9][0-9]", geo_accession_id)
+    s = re.search("GSE[0-9]{3,}", geo_accession_id)  # searches for geo accession with at least 3 digits
     if s is not None:
         return s.group()
     else:
         return ""
-
