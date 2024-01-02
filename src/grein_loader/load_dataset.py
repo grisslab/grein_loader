@@ -13,15 +13,17 @@ import logging
 import json
 import pandas
 from typing import Tuple
-from .exceptions import GreinLoaderException
-from . import utils
+#from .exceptions import GreinLoaderException
+#from . import utils
+from exceptions import GreinLoaderException
+import utils
 
 LOGGER = logging.getLogger(__name__)
 
 
-def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
+def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pandas.DataFrame]:
     """ Loads a dataset from GREIN.
-        :param: gse_id: The dataset's GSE id.
+        :param: gse_id: The dataset's GSE id, download_type: The type of data to download for expression value, either RAW or NORMALIZED
         :type: gse_id: str
         :return: description, metadata, count_matrix of the GREIN dataset
         :rtype: description:dict, metadata:dictionary, count_matrix:pandas dataframe
@@ -212,6 +214,14 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         line_content = line.decode()
         if "ACK" in line_content:
             break
+    
+    # in case method parameter is set to normalized, different request is send
+    if download_type == "NORMALIZED":
+        try: 
+            xhr_send_r = s.post(xhr_send_url, data=payloads.count_matrix_normalized())
+        except requests.exceptions.HTTPError as err:
+            LOGGER.error("Streaming error for normailzed count matrix", err)
+            raise GreinLoaderException("Streaming error for normailzed count matrix", err)
 
     # requesting count matrix
     try:
@@ -323,4 +333,3 @@ def _generate_metadata_formdata(n_columns, no_samples=100):
         n = n+1
     raw_form += raw_utils.raw_form_end(no_samples)
     return raw_form
-
