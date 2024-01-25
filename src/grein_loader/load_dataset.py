@@ -26,6 +26,10 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
         :return: description, metadata, count_matrix of the GREIN dataset
         :rtype: description:dict, metadata:dictionary, count_matrix:pandas dataframe
     """
+    if download_type != "RAW" and download_type != "NORMALIZED":
+        LOGGER.error("Invalid download_type passed. Value must either by 'RAW' or 'NORMALIZED'.")
+        raise ValueError("Invalid download_type passed. Value must either by 'RAW' or 'NORMALIZED'.")
+
     payloads = utils.GreinLoaderUtils(gse_id)
     # create the unique random string used later for nonce parameter in url
     n = utils.GreinLoaderUtils.get_random_url_string_parameter()
@@ -157,7 +161,7 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
                 "Origin": "http://www.ilincs.org",
                 "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
             },
-            data=payloads.description_formdata(100))
+            data=payloads.description_formdata(100))  # Bruh wtf moment ??? 
         description_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         LOGGER.error(f"Dataset description for {gse_id} not received: ", err)
