@@ -55,7 +55,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         lines = xhr_streaming_r.iter_lines()  # saves information provided by the streaming response
         xhr_streaming_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error: ", err)
+        LOGGER.error("Streaming error: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     for line in lines:  # decodes content of provided by the streaming request
@@ -69,7 +70,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         xhr_send_r = s.post(xhr_send_url, data='["0#0|o|"]')
         xhr_send_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error: ", err)
+        LOGGER.error("Streaming error: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     config = None
@@ -96,7 +98,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
                                     data=payloads.ui_init_parameter())  # data needs the gse_id in the payload str
         xhr_send_summary_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error with: ", err)
+        LOGGER.error("Streaming error with: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     for line in lines:
@@ -108,7 +111,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         lines = xhr_streaming_r.iter_lines()
         xhr_streaming_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error with: ", err)
+        LOGGER.error("Streaming error with: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     try:
@@ -116,7 +120,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         xhr_send_r = s.post(xhr_send_url,
                             data=payloads.method_update_parameter())  # sets initial parameters for the dataset
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error with: ", err)
+        LOGGER.error("Streaming error with: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     for line in lines:
@@ -128,7 +133,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         LOGGER.debug("Streaming client parameter")
         xhr_send_r = s.post(xhr_send_url, data=payloads.client_parameter())  # sets client parameter for dataset
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error with: ", err)
+        LOGGER.error("Streaming error with: ", str(err))
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     try:
@@ -160,14 +166,16 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
             data=payloads.description_formdata(100))
         description_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        LOGGER.error(f"Dataset description for {gse_id} not received: ", err)
+        LOGGER.error(f"Dataset description for {gse_id} not received")
+        LOGGER.exception(err)
         raise GreinLoaderException(f"Dataset description for {gse_id} not received: ", err)
 
     # request necessary for the metadata labels, provided in the ui via streaming
     try:
         metadata_labels_r = s.post(xhr_send_url, data=payloads.metadata_labels_parameter())
     except requests.exceptions.HTTPError as err:
-        LOGGER.error(f"Metadata labels for {gse_id} not received: ", err)
+        LOGGER.error(f"Metadata labels for {gse_id} not received.")
+        LOGGER.exception(err)
         raise GreinLoaderException(f"Metadata labels for {gse_id} not received: ", err)
 
     ui_content = []
@@ -198,14 +206,16 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
                 "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
             }, data=metadata_formdata)
     except requests.exceptions.HTTPError as err:
-        LOGGER.error(f"Metadata for {gse_id} not received: ", err)
+        LOGGER.error(f"Metadata for {gse_id} not received.")
+        LOGGER.exception(err)
         raise GreinLoaderException(f"Metadata for {gse_id} not received: ", err)
 
     # method update for count_matrix
     try:
         xhr_send_r = s.post(xhr_send_url, data=payloads.count_matrix_parameter())
     except requests.exceptions.HTTPError as err:
-        LOGGER.error("Streaming error", err)
+        LOGGER.error("Streaming error")
+        LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
 
     for line in lines:
@@ -217,7 +227,8 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
     try:
         count_matrix_r = s.post(f"http://www.ilincs.org/apps/grein/session/{session_id}/download/downloadcounts?w=")
     except requests.exceptions.HTTPError as err:
-        LOGGER.error(f"Count Matrix for {gse_id} not received ", err)
+        LOGGER.error(f"Count Matrix for {gse_id} not received")
+        LOGGER.exception(err)
         raise GreinLoaderException(f"Count Matrix for {gse_id} not received: ", err)
 
     LOGGER.debug("Count matrix received")
