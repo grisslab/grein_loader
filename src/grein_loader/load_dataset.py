@@ -19,13 +19,17 @@ from . import utils
 LOGGER = logging.getLogger(__name__)
 
 
-def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
+def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pandas.DataFrame]:
     """ Loads a dataset from GREIN.
-        :param: gse_id: The dataset's GSE id.
+        :param: gse_id: The dataset's GSE id, download_type: The type of data to download for expression value, either RAW or NORMALIZED
         :type: gse_id: str
         :return: description, metadata, count_matrix of the GREIN dataset
         :rtype: description:dict, metadata:dictionary, count_matrix:pandas dataframe
     """
+    if download_type != "RAW" and download_type != "NORMALIZED":
+        LOGGER.error("Invalid download_type passed. Value must either by 'RAW' or 'NORMALIZED'.")
+        raise ValueError("Invalid download_type passed. Value must either by 'RAW' or 'NORMALIZED'.")
+
     payloads = utils.GreinLoaderUtils(gse_id)
     # create the unique random string used later for nonce parameter in url
     n = utils.GreinLoaderUtils.get_random_url_string_parameter()
@@ -163,7 +167,7 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
                 "Origin": "http://www.ilincs.org",
                 "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
             },
-            data=payloads.description_formdata(100))
+            data=payloads.description_formdata(100))  # Bruh wtf moment ??? 
         description_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         LOGGER.error(f"Dataset description for {gse_id} not received")
@@ -222,6 +226,14 @@ def load_dataset(gse_id: str) -> Tuple[dict, dict, pandas.DataFrame]:
         line_content = line.decode()
         if "ACK" in line_content:
             break
+    
+    # in case method parameter is set to normalized, different request is send
+    if download_type == "NORMALIZED":
+        try: 
+            xhr_send_r = s.post(xhr_send_url, data=payloads.count_matrix_normalized())
+        except requests.exceptions.HTTPError as err:
+            LOGGER.error("Streaming error for normailzed count matrix", err)
+            raise GreinLoaderException("Streaming error for normailzed count matrix", err)
 
     # requesting count matrix
     try:
@@ -334,4 +346,3 @@ def _generate_metadata_formdata(n_columns, no_samples=100):
         n = n+1
     raw_form += raw_utils.raw_form_end(no_samples)
     return raw_form
-
