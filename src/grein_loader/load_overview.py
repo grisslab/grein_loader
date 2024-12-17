@@ -16,6 +16,7 @@ def load_overview(no_datasets = None) -> list:
                  containing GEO id, number of samples, Species, title and summary
         :rtype: list_overview:list of dictionaries
     """
+
     if no_datasets == None:
         LOGGER.debug("Requesting all Datasets from GREIN")
         no_datasets = MAX_GREIN_DATASETS
