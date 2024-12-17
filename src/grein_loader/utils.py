@@ -56,7 +56,7 @@ class GreinLoaderUtils:
 
     @staticmethod
     def get_random_url_string_parameter():
-        return ''.join(random.choice(string.ascii_letters) for _ in range(10)) + "/" + \
+        return ''.join(random.choice(string.ascii_letters) for _ in range(18)) + "/" + \
                ''.join(random.choice(string.ascii_letters) for _ in range(3)) + "/" + \
                ''.join(random.choice(string.ascii_letters) for _ in range(8))
 

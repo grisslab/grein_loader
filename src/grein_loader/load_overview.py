@@ -26,13 +26,13 @@ def load_overview(no_datasets = None) -> list:
     random_str = utils.GreinLoaderUtils.get_random_nonce_parameter()
 
     # base url
-    grein_url = "http://www.ilincs.org/apps/grein/"
+    grein_url = "https://www.ilincs.org/apps/grein/"
 
     # xhr_streaming_url will always be used for streaming requests in the code
-    xhr_streaming_url = f"http://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_streaming"
+    xhr_streaming_url = f"https://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_streaming"
 
     # xhr_send_url will always be used for streaming requests in the code
-    xhr_send_url = f"http://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_send"
+    xhr_send_url = f"https://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_send"
 
 
     LOGGER.debug("Requesting Session")
@@ -98,7 +98,7 @@ def load_overview(no_datasets = None) -> list:
         LOGGER.error("Streaming error with: ", err)
         raise GreinLoaderException("Streaming error: ", err)
 
-    url_overview = f"http://www.ilincs.org/apps/grein/session/{session_id}/dataobj/datatable?w=&nonce={random_str}"
+    url_overview = f"https://www.ilincs.org/apps/grein/session/{session_id}/dataobj/datatable?w=&nonce={random_str}"
     # requesting overview of dataset with number of datasets defined in the data parameter, given in as method parameter
 
     try:

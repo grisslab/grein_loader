@@ -35,13 +35,13 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
     n = utils.GreinLoaderUtils.get_random_url_string_parameter()
 
     # xhr_streaming_url will always be used for streaming requests in the code
-    xhr_streaming_url = f"http://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_streaming"
+    xhr_streaming_url = f"https://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_streaming"
 
     # xhr_send_url will always be used for streaming requests in the code
-    xhr_send_url = f"http://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_send"
+    xhr_send_url = f"https://www.ilincs.org/apps/grein/__sockjs__/n={n}/xhr_send"
 
     # base url
-    grein_url = "http://www.ilincs.org/apps/grein/"
+    grein_url = "https://www.ilincs.org/apps/grein/"
 
     LOGGER.debug("Requesting Session")
     s = requests.session()  # requests a session on GREIN, cookies are provided within the session
@@ -160,12 +160,12 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
     try:
         LOGGER.debug("Request Dataset")
         description_r = s.post(
-            f"http://www.ilincs.org/apps/grein/session/{session_id}/dataobj/geo_summary?w=&nonce={random_str}",
+            f"https://www.ilincs.org/apps/grein/session/{session_id}/dataobj/geo_summary?w=&nonce={random_str}",
             headers={
                 "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
                 "Accept": "application/json, text/javascript, */*; q=0.01",
-                "Origin": "http://www.ilincs.org",
-                "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
+                "Origin": "https://www.ilincs.org",
+                "Referer": "https://www.ilincs.org/apps/grein/?gse=" + gse_id
             },
             data=payloads.description_formdata(100))  # Bruh wtf moment ??? 
         description_r.raise_for_status()
@@ -202,12 +202,12 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
     # metadata request, without the keys for later
     try:
         metadata_r = s.post(
-            f"http://www.ilincs.org/apps/grein/session/{session_id}/dataobj/metadata_full?w=&nonce={random_str}]",
+            f"https://www.ilincs.org/apps/grein/session/{session_id}/dataobj/metadata_full?w=&nonce={random_str}]",
             headers={
                 "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
                 "Accept": "application/json, text/javascript, */*; q=0.01",
-                "Origin": "http://www.ilincs.org",
-                "Referer": "http://www.ilincs.org/apps/grein/?gse=" + gse_id
+                "Origin": "https://www.ilincs.org",
+                "Referer": "https://www.ilincs.org/apps/grein/?gse=" + gse_id
             }, data=metadata_formdata)
     except requests.exceptions.HTTPError as err:
         LOGGER.error(f"Metadata for {gse_id} not received.")
@@ -237,7 +237,7 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
 
     # requesting count matrix
     try:
-        count_matrix_r = s.post(f"http://www.ilincs.org/apps/grein/session/{session_id}/download/downloadcounts?w=")
+        count_matrix_r = s.post(f"https://www.ilincs.org/apps/grein/session/{session_id}/download/downloadcounts?w=")
     except requests.exceptions.HTTPError as err:
         LOGGER.error(f"Count Matrix for {gse_id} not received")
         LOGGER.exception(err)
