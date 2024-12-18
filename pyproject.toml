@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "grein_loader"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
   {name="Griss Lab", email="johannes.griss@meduniwien.ac.at"},
   {name="Alexander Grentner", email="alexander.grentner@meduniwien.ac.at"}
