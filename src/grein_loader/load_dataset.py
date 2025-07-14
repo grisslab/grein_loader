@@ -55,7 +55,7 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
     # streaming request is necessary for connection parameters
     try:
         xhr_streaming_r = s.post(xhr_streaming_url, stream=True)
-        lines = xhr_streaming_r.iter_lines()  # saves information provided by the streaming response
+        lines = xhr_streaming_r.iter_lines(chunk_size=2048)  # saves information provided by the streaming response
         xhr_streaming_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         LOGGER.error("Streaming error: ", str(err))
@@ -111,12 +111,18 @@ def load_dataset(gse_id: str, download_type: str="RAW") -> Tuple[dict, dict, pan
     LOGGER.debug("Opening new connection")
     try:
         xhr_streaming_r = s.post(xhr_streaming_url, stream=True)
-        lines = xhr_streaming_r.iter_lines()
+        lines = xhr_streaming_r.iter_lines(chunk_size=2048)
         xhr_streaming_r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         LOGGER.error("Streaming error with: ", str(err))
         LOGGER.exception(err)
         raise GreinLoaderException("Streaming error: ", err)
+    
+    # make sure new stream is established
+    for line in lines:
+        if "hhhhhhhhhhhhh" in line.decode():
+            LOGGER.debug("Connection initialized")
+            break
 
     try:
         LOGGER.debug("Streaming parameter")
